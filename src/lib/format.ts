@@ -40,12 +40,12 @@ const aed = new Intl.NumberFormat("en-AE", {
   maximumFractionDigits: 2,
 });
 
-/** First letter of every word, e.g. "Legal Translation English to Arabic" → "LTETA". */
+/** First letter of every word, e.g. "Legal Translation English to Arabic" → "LTETA". Skips punctuation-only words and leading punctuation, e.g. "(annual)" → "A". */
 export function acronym(phrase: string): string {
   return phrase
     .split(/\s+/)
-    .filter(Boolean)
-    .map((w) => w[0]!.toUpperCase())
+    .map((w) => w.match(/[a-zA-Z]/)?.[0]?.toUpperCase())
+    .filter((c): c is string => Boolean(c))
     .join("");
 }
 
