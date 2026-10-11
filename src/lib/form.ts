@@ -55,6 +55,7 @@ export const id = z.coerce.number().int().positive();
 /** Shared priced-entry fields. */
 export const pricingFields = {
   priceAed: money,
+  costAed: money,
   governmentFeesAed: money,
   priceNote: optionalText,
   turnaroundMinDays: optionalInt,

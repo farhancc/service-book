@@ -73,7 +73,7 @@ async function Detail({
             withPrice={attestationMessage(a, country, documentType, true)}
             withoutPrice={attestationMessage(a, country, documentType, false)}
           />
-          <HistoryList rows={history} />
+          {user && <HistoryList rows={history} />}
         </div>
       </div>
     </>

@@ -6,6 +6,7 @@ import type { EntityType } from "@/db/schema";
 /** Fields whose changes are kept in the price history. */
 export const TRACKED_FIELDS = {
   priceAed: "Our fee",
+  costAed: "Our cost",
   governmentFeesAed: "Government fees",
   minimumChargeAed: "Minimum charge",
   turnaroundMinDays: "Turnaround (min days)",

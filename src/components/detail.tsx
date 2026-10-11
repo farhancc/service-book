@@ -9,6 +9,7 @@ import { ButtonLink, Section } from "./ui";
 
 type Priced = {
   priceAed: string | null;
+  costAed: string | null;
   governmentFeesAed: string | null;
   priceNote: string | null;
   turnaroundMinDays: number | null;
@@ -34,6 +35,7 @@ export function PriceCard({
   extra?: ReactNode;
 }) {
   const price = formatAed(item.priceAed);
+  const cost = user ? formatAed(item.costAed) : null;
   const fees = formatAed(item.governmentFeesAed);
   const turnaround = formatTurnaround(item.turnaroundMinDays, item.turnaroundMaxDays);
   return (
@@ -57,6 +59,12 @@ export function PriceCard({
           <div>
             <dt className="text-sm text-muted">Government fees</dt>
             <dd className="text-xl font-bold">{fees}</dd>
+          </div>
+        )}
+        {cost && (
+          <div>
+            <dt className="text-sm text-muted">Our cost</dt>
+            <dd className="text-xl font-bold text-pending">{cost}</dd>
           </div>
         )}
         {turnaround && (

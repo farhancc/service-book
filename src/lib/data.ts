@@ -95,6 +95,7 @@ export async function listTranslations(filters: { q?: string; kind?: string }) {
         matchAllWords(filters.q, [
           translations.sourceLanguage,
           translations.targetLanguage,
+          translations.code,
           documentTypes.name,
         ]),
       ),

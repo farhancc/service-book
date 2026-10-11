@@ -73,7 +73,7 @@ async function Detail({
         </div>
         <div className="space-y-4">
           <CopyMessage withPrice={serviceMessage(s, true)} withoutPrice={serviceMessage(s, false)} />
-          <HistoryList rows={history} />
+          {user && <HistoryList rows={history} />}
         </div>
       </div>
     </>

@@ -8,6 +8,7 @@ type Errors = Record<string, string> | undefined;
 
 export type PricingDefaults = {
   priceAed?: string | null;
+  costAed?: string | null;
   governmentFeesAed?: string | null;
   priceNote?: string | null;
   turnaroundMinDays?: number | null;
@@ -65,6 +66,21 @@ export function PricingFields({
             defaultValue={defaults.governmentFeesAed ?? ""}
             className={inputClass}
             {...invalid(errors, "governmentFeesAed")}
+          />
+        </Field>
+        <Field
+          label="Our cost (AED)"
+          name="costAed"
+          error={err(errors, "costAed")}
+          hint="What it costs us. Internal only, never shown to clients"
+        >
+          <input
+            id="costAed"
+            name="costAed"
+            inputMode="decimal"
+            defaultValue={defaults.costAed ?? ""}
+            className={inputClass}
+            {...invalid(errors, "costAed")}
           />
         </Field>
         {extra}

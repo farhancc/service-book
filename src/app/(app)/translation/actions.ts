@@ -6,6 +6,7 @@ import { z } from "zod";
 import { db, schema } from "@/db";
 import { requireRole } from "@/lib/auth";
 import { money, pricingFields, requiredText, toFieldErrors, turnaroundError, type ActionState } from "@/lib/form";
+import { translationCode } from "@/lib/format";
 import { deleteWithHistory, recordChanges } from "@/lib/history";
 
 const TranslationInput = z.object({
@@ -34,7 +35,14 @@ export async function saveTranslation(
   if (bad) return bad;
 
   const now = new Date();
-  const values = { ...input, updatedById: user.id, updatedAt: now, ...(markVerified ? { lastVerifiedAt: now } : {}) };
+  const code = translationCode(input.kind, input.sourceLanguage, input.targetLanguage);
+  const values = {
+    ...input,
+    code,
+    updatedById: user.id,
+    updatedAt: now,
+    ...(markVerified ? { lastVerifiedAt: now } : {}),
+  };
 
   let savedId: number;
   if (existingId) {

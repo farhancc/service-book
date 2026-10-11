@@ -50,6 +50,7 @@ async function Detail({
         title={`${t.sourceLanguage} → ${t.targetLanguage}`}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
+            {t.code && <Tag>{t.code}</Tag>}
             <Tag>{kind}</Tag>
             <span>{documentType ?? "Any document"}</span>
           </span>
@@ -92,7 +93,7 @@ async function Detail({
             withPrice={translationMessage(t, kind, unit, documentType, true)}
             withoutPrice={translationMessage(t, kind, unit, documentType, false)}
           />
-          <HistoryList rows={history} />
+          {user && <HistoryList rows={history} />}
         </div>
       </div>
     </>

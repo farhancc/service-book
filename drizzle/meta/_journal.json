@@ -15,6 +15,13 @@
       "when": 1791691245882,
       "tag": "0001_pg_trgm_search",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791695706631,
+      "tag": "0002_lush_george_stacy",
+      "breakpoints": true
     }
   ]
 }

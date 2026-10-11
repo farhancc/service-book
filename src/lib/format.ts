@@ -40,6 +40,21 @@ const aed = new Intl.NumberFormat("en-AE", {
   maximumFractionDigits: 2,
 });
 
+/** First letter of every word, e.g. "Legal Translation English to Arabic" → "LTETA". */
+export function acronym(phrase: string): string {
+  return phrase
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w) => w[0]!.toUpperCase())
+    .join("");
+}
+
+/** Short reference code for a translation entry, e.g. "LTETA". */
+export function translationCode(kind: string, sourceLanguage: string, targetLanguage: string): string {
+  const kindWord = kind.charAt(0).toUpperCase() + kind.slice(1);
+  return acronym(`${kindWord} Translation ${sourceLanguage} to ${targetLanguage}`);
+}
+
 /** "AED 1,250" or null when no price is set. */
 export function formatAed(value: string | number | null | undefined): string | null {
   if (value === null || value === undefined || value === "") return null;

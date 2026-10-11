@@ -112,6 +112,7 @@ export function TranslationList({
             price={price ? `${price} ${PRICING_UNIT_LABELS[t.pricingUnit]}` : null}
             badges={
               <>
+                {t.code && <Tag>{t.code}</Tag>}
                 <Tag>{TRANSLATION_KIND_LABELS[t.kind]}</Tag>
                 {t.available ? (
                   <FreshnessBadge state={freshness(t.lastVerifiedAt, now)} date={t.lastVerifiedAt} />

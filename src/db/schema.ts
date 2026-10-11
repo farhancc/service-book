@@ -73,6 +73,7 @@ export type AttestationStep = {
 /** Columns every priced entry shares. */
 const pricing = {
   priceAed: numeric("price_aed", { precision: 10, scale: 2 }),
+  costAed: numeric("cost_aed", { precision: 10, scale: 2 }),
   governmentFeesAed: numeric("government_fees_aed", { precision: 10, scale: 2 }),
   priceNote: text("price_note"),
   turnaroundMinDays: integer("turnaround_min_days"),
@@ -111,6 +112,8 @@ export const translations = pgTable("translations", {
   documentTypeId: integer("document_type_id").references(() => documentTypes.id, {
     onDelete: "set null",
   }),
+  /** Short reference code, e.g. "Legal Translation English to Arabic" → "LTETA". Kept in sync on save. */
+  code: text("code").notNull().default(""),
   kind: translationKindEnum("kind").notNull().default("legal"),
   pricingUnit: pricingUnitEnum("pricing_unit").notNull().default("page"),
   minimumChargeAed: numeric("minimum_charge_aed", { precision: 10, scale: 2 }),
