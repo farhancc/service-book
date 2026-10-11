@@ -12,11 +12,18 @@ function escapeLike(s: string) {
   return s.replace(/[\\%_]/g, (c) => `\\${c}`);
 }
 
-/** Every word must match at least one of the columns: "india degree" finds India + Degree. */
+/**
+ * Every word must match at least one of the columns: "india degree" finds India + Degree.
+ * A word also matches on close spelling (trigram word-similarity), so "indea" still finds "India".
+ */
 function matchAllWords(q: string | undefined, columns: PgColumn[]): SQL | undefined {
   const words = (q ?? "").trim().split(/\s+/).filter(Boolean).slice(0, 6);
   if (!words.length) return undefined;
-  return and(...words.map((w) => or(...columns.map((c) => ilike(c, `%${escapeLike(w)}%`)))));
+  return and(
+    ...words.map((w) =>
+      or(...columns.map((c) => or(ilike(c, `%${escapeLike(w)}%`), sql`word_similarity(${w}, ${c}) >= 0.45`))),
+    ),
+  );
 }
 
 // ── Reference lists ────────────────────────────────────────────────────────────
