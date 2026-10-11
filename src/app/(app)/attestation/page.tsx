@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { LiveFilterForm } from "@/components/client";
 import { AttestationList } from "@/components/lists";
 import { ButtonLink, Empty, inputClass, LoadingBlock, PageHeader } from "@/components/ui";
 import { getUser, hasRole } from "@/lib/auth";
@@ -40,7 +41,7 @@ async function Index({ searchParams }: { searchParams: PageProps<"/attestation">
         subtitle="How each country's documents get attested for use in the UAE."
         actions={canEdit && <ButtonLink href={newHref}>Add route</ButtonLink>}
       />
-      <form action="/attestation" className="mb-5 grid gap-2 sm:grid-cols-[1fr_1fr_1fr_auto]">
+      <LiveFilterForm action="/attestation" className="mb-5 grid gap-2 sm:grid-cols-[1fr_1fr_1fr_auto]">
         <select name="country" defaultValue={countryId ?? ""} aria-label="Country" className={inputClass}>
           <option value="">All countries</option>
           {countries.map((c) => (
@@ -61,7 +62,7 @@ async function Index({ searchParams }: { searchParams: PageProps<"/attestation">
         <button type="submit" className="rounded-md bg-stamp px-5 py-2.5 font-semibold text-white">
           Filter
         </button>
-      </form>
+      </LiveFilterForm>
       {items.length ? (
         <AttestationList items={items} now={await requestNow()} />
       ) : (

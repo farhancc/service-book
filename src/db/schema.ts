@@ -98,6 +98,8 @@ export const attestations = pgTable(
       .notNull()
       .references(() => documentTypes.id, { onDelete: "restrict" }),
     variant: text("variant").notNull().default("Standard"),
+    /** Short reference code, e.g. "Urgent Degree certificate Attestation India" → "UDCAI". */
+    code: text("code").notNull().default(""),
     steps: jsonb("steps").$type<AttestationStep[]>().notNull().default([]),
     requiredDocuments: text("required_documents").array().notNull().default([]),
     ...pricing,
@@ -124,6 +126,8 @@ export const services = pgTable("services", {
   id: serial("id").primaryKey(),
   category: serviceCategoryEnum("category").notNull().default("other"),
   name: text("name").notNull(),
+  /** Short reference code, e.g. "Business setup Mainland company formation" → "BSMCF". */
+  code: text("code").notNull().default(""),
   description: text("description"),
   requirements: text("requirements").array().notNull().default([]),
   ...pricing,

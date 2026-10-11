@@ -55,6 +55,17 @@ export function translationCode(kind: string, sourceLanguage: string, targetLang
   return acronym(`${kindWord} Translation ${sourceLanguage} to ${targetLanguage}`);
 }
 
+/** Short reference code for an attestation route, e.g. "Degree certificate Attestation India" → "DCAI". */
+export function attestationCode(documentType: string, country: string, variant: string): string {
+  const prefix = variant !== "Standard" ? `${variant} ` : "";
+  return acronym(`${prefix}${documentType} Attestation ${country}`);
+}
+
+/** Short reference code for a service, e.g. "Business setup Mainland company formation" → "BSMCF". */
+export function serviceCode(categoryLabel: string, name: string): string {
+  return acronym(`${categoryLabel} ${name}`);
+}
+
 /** "AED 1,250" or null when no price is set. */
 export function formatAed(value: string | number | null | undefined): string | null {
   if (value === null || value === undefined || value === "") return null;

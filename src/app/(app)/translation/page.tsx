@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { LiveFilterForm } from "@/components/client";
 import { TranslationList } from "@/components/lists";
 import { ButtonLink, Empty, inputClass, LoadingBlock, PageHeader } from "@/components/ui";
 import { getUser, hasRole } from "@/lib/auth";
@@ -30,7 +31,7 @@ async function Index({ searchParams }: { searchParams: PageProps<"/translation">
         subtitle="Which languages and documents we translate, and what it costs."
         actions={canEdit && <ButtonLink href="/translation/new">Add price</ButtonLink>}
       />
-      <form action="/translation" className="mb-5 grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
+      <LiveFilterForm action="/translation" className="mb-5 grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
         <input
           name="q"
           defaultValue={q}
@@ -49,7 +50,7 @@ async function Index({ searchParams }: { searchParams: PageProps<"/translation">
         <button type="submit" className="rounded-md bg-stamp px-5 py-2.5 font-semibold text-white">
           Filter
         </button>
-      </form>
+      </LiveFilterForm>
       {items.length ? (
         <TranslationList items={items} now={await requestNow()} />
       ) : (

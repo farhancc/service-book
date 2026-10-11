@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Tag } from "@/components/badges";
 import { CopyMessage } from "@/components/client";
 import { CheckedNotice, ChecklistSection, EntryActions, HistoryList, PriceCard } from "@/components/detail";
 import { LoadingBlock, PageHeader, Section } from "@/components/ui";
@@ -45,7 +46,12 @@ async function Detail({
       <CheckedNotice show={sp.checked === "1"} />
       <PageHeader
         title={`${documentType} — ${country}`}
-        subtitle={a.variant !== "Standard" ? `${a.variant} route` : "Attestation for use in the UAE"}
+        subtitle={
+          <span className="flex flex-wrap items-center gap-2">
+            {a.code && <Tag>{a.code}</Tag>}
+            <span>{a.variant !== "Standard" ? `${a.variant} route` : "Attestation for use in the UAE"}</span>
+          </span>
+        }
         back={{ href: `/attestation?country=${a.countryId}`, label: `All ${country} routes` }}
         actions={
           <EntryActions

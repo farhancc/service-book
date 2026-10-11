@@ -51,6 +51,7 @@ function ListFrame({ children }: { children: React.ReactNode }) {
 export type AttestationListItem = {
   id: number;
   variant: string;
+  code: string;
   priceAed: string | null;
   turnaroundMinDays: number | null;
   turnaroundMaxDays: number | null;
@@ -78,11 +79,14 @@ export function AttestationList({ items, now }: { items: AttestationListItem[]; 
             .join(", ")}
           price={formatAed(a.priceAed)}
           badges={
-            a.available ? (
-              <FreshnessBadge state={freshness(a.lastVerifiedAt, now)} date={a.lastVerifiedAt} />
-            ) : (
-              <UnavailableBadge />
-            )
+            <>
+              {a.code && <Tag>{a.code}</Tag>}
+              {a.available ? (
+                <FreshnessBadge state={freshness(a.lastVerifiedAt, now)} date={a.lastVerifiedAt} />
+              ) : (
+                <UnavailableBadge />
+              )}
+            </>
           }
         />
       ))}
@@ -140,6 +144,7 @@ export function ServiceList({ items, now }: { items: Service[]; now: Date }) {
           price={formatAed(s.priceAed)}
           badges={
             <>
+              {s.code && <Tag>{s.code}</Tag>}
               <Tag>{SERVICE_CATEGORY_LABELS[s.category]}</Tag>
               {s.available ? (
                 <FreshnessBadge state={freshness(s.lastVerifiedAt, now)} date={s.lastVerifiedAt} />

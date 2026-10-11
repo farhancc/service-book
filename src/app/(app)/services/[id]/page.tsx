@@ -44,7 +44,12 @@ async function Detail({
       <CheckedNotice show={sp.checked === "1"} />
       <PageHeader
         title={s.name}
-        subtitle={<Tag>{SERVICE_CATEGORY_LABELS[s.category]}</Tag>}
+        subtitle={
+          <span className="flex flex-wrap items-center gap-2">
+            {s.code && <Tag>{s.code}</Tag>}
+            <Tag>{SERVICE_CATEGORY_LABELS[s.category]}</Tag>
+          </span>
+        }
         back={{ href: `/services?category=${s.category}`, label: SERVICE_CATEGORY_LABELS[s.category] }}
         actions={
           <EntryActions

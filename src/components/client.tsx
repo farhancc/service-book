@@ -1,9 +1,57 @@
 "use client";
 
-import { startTransition, useActionState, useState, type ComponentProps, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { startTransition, useActionState, useRef, useState, type ComponentProps, type FormEvent } from "react";
 import { useFormStatus } from "react-dom";
 import type { ActionState } from "@/lib/form";
 import { buttonStyles, cx, inputClass } from "./ui";
+
+/**
+ * A filter/search <form> that updates the URL as you type, no submit needed.
+ * Text fields are debounced; selects (and Enter) apply immediately.
+ */
+export function LiveFilterForm({
+  action,
+  className,
+  children,
+}: {
+  action: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  function submitNow() {
+    if (timer.current) clearTimeout(timer.current);
+    const params = new URLSearchParams([...new FormData(formRef.current!).entries()] as [string, string][]);
+    const qs = params.toString();
+    router.replace(qs ? `${action}?${qs}` : action, { scroll: false });
+  }
+
+  function onInput() {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(submitNow, 300);
+  }
+
+  return (
+    <form
+      ref={formRef}
+      action={action}
+      role="search"
+      onInput={onInput}
+      onChange={submitNow}
+      onSubmit={(e) => {
+        e.preventDefault();
+        submitNow();
+      }}
+      className={className}
+    >
+      {children}
+    </form>
+  );
+}
 
 /**
  * Like useActionState on a <form action>, but the form keeps what the person

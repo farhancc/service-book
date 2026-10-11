@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { FreshnessBadge } from "@/components/badges";
+import { LiveFilterForm } from "@/components/client";
 import { AttestationList, ServiceList, TranslationList } from "@/components/lists";
 import { Empty, inputClass, LoadingBlock, Section } from "@/components/ui";
 import { counts, listCountries, needsVerification, requestNow, searchEverything } from "@/lib/data";
@@ -26,7 +27,7 @@ async function Home({ searchParams }: { searchParams: PageProps<"/">["searchPara
           Your role can&apos;t make that change. Ask an admin if you need editing access.
         </p>
       )}
-      <form action="/" role="search" className="relative">
+      <LiveFilterForm action="/" className="relative">
         <label htmlFor="q" className="mb-2 block text-2xl font-extrabold tracking-tight sm:text-3xl">
           What does the client need?
         </label>
@@ -47,7 +48,7 @@ async function Home({ searchParams }: { searchParams: PageProps<"/">["searchPara
             Search
           </button>
         </div>
-      </form>
+      </LiveFilterForm>
       {q ? <Results q={q} /> : <Dashboard />}
     </div>
   );

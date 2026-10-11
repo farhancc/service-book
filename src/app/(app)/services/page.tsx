@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { LiveFilterForm } from "@/components/client";
 import { ServiceList } from "@/components/lists";
 import { ButtonLink, cx, Empty, inputClass, LoadingBlock, PageHeader } from "@/components/ui";
 import { getUser, hasRole } from "@/lib/auth";
@@ -47,13 +48,13 @@ async function Index({ searchParams }: { searchParams: PageProps<"/services">["s
           </Link>
         ))}
       </div>
-      <form action="/services" className="mb-5 flex gap-2">
+      <LiveFilterForm action="/services" className="mb-5 flex gap-2">
         {category && <input type="hidden" name="category" value={category} />}
         <input name="q" defaultValue={q} placeholder="Search services" aria-label="Search services" className={inputClass} />
         <button type="submit" className="rounded-md bg-stamp px-5 font-semibold text-white">
           Search
         </button>
-      </form>
+      </LiveFilterForm>
       {items.length ? (
         <ServiceList items={items} now={await requestNow()} />
       ) : (

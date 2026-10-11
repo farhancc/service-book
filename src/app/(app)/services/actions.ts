@@ -14,6 +14,7 @@ import {
   turnaroundError,
   type ActionState,
 } from "@/lib/form";
+import { SERVICE_CATEGORY_LABELS, serviceCode } from "@/lib/format";
 import { deleteWithHistory, recordChanges } from "@/lib/history";
 
 const ServiceInput = z.object({
@@ -37,7 +38,14 @@ export async function saveService(
   if (bad) return bad;
 
   const now = new Date();
-  const values = { ...input, updatedById: user.id, updatedAt: now, ...(markVerified ? { lastVerifiedAt: now } : {}) };
+  const code = serviceCode(SERVICE_CATEGORY_LABELS[input.category], input.name);
+  const values = {
+    ...input,
+    code,
+    updatedById: user.id,
+    updatedAt: now,
+    ...(markVerified ? { lastVerifiedAt: now } : {}),
+  };
 
   let savedId: number;
   if (existingId) {

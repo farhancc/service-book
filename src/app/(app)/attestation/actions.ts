@@ -13,6 +13,7 @@ import {
   turnaroundError,
   type ActionState,
 } from "@/lib/form";
+import { attestationCode } from "@/lib/format";
 import { deleteWithHistory, recordChanges } from "@/lib/history";
 
 const step = z.object({
@@ -57,9 +58,19 @@ export async function saveAttestation(
     Object.fromEntries(Object.entries(s).filter(([, v]) => v !== "" && v !== undefined)),
   ) as schema.AttestationStep[];
 
+  const [country, documentType] = await Promise.all([
+    db.query.countries.findFirst({ where: eq(schema.countries.id, input.countryId) }),
+    db.query.documentTypes.findFirst({ where: eq(schema.documentTypes.id, input.documentTypeId) }),
+  ]);
+  if (!country || !documentType) {
+    return { error: "Pick a country and document type." };
+  }
+
   const now = new Date();
+  const code = attestationCode(documentType.name, country.name, input.variant);
   const values = {
     ...input,
+    code,
     steps,
     updatedById: user.id,
     updatedAt: now,

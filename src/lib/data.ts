@@ -40,6 +40,7 @@ export async function listDocumentTypes() {
 const attestationRow = {
   id: attestations.id,
   variant: attestations.variant,
+  code: attestations.code,
   priceAed: attestations.priceAed,
   governmentFeesAed: attestations.governmentFeesAed,
   turnaroundMinDays: attestations.turnaroundMinDays,
@@ -63,7 +64,7 @@ export async function listAttestations(filters: { q?: string; countryId?: number
       and(
         filters.countryId ? eq(attestations.countryId, filters.countryId) : undefined,
         filters.documentTypeId ? eq(attestations.documentTypeId, filters.documentTypeId) : undefined,
-        matchAllWords(filters.q, [countries.name, documentTypes.name, attestations.variant]),
+        matchAllWords(filters.q, [countries.name, documentTypes.name, attestations.variant, attestations.code]),
       ),
     )
     .orderBy(asc(countries.name), asc(documentTypes.name), asc(attestations.variant))
@@ -134,7 +135,7 @@ export async function listServices(filters: { q?: string; category?: string }) {
     .where(
       and(
         category ? eq(services.category, category) : undefined,
-        matchAllWords(filters.q, [services.name, services.description]),
+        matchAllWords(filters.q, [services.name, services.description, services.code]),
       ),
     )
     .orderBy(asc(services.category), asc(services.name))
