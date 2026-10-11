@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Tag } from "@/components/badges";
 import { LoadingBlock, PageHeader } from "@/components/ui";
 import { requireRole } from "@/lib/auth";
 import { getAttestation, listCountries, listDocumentTypes } from "@/lib/data";
@@ -30,6 +31,7 @@ async function Edit({ params }: { params: PageProps<"/attestation/[id]/edit">["p
     <>
       <PageHeader
         title={`Edit: ${row.documentType} — ${row.country}`}
+        subtitle={row.a.code && <Tag>{row.a.code}</Tag>}
         back={{ href: `/attestation/${id}`, label: "Back to route" }}
       />
       <AttestationForm attestation={row.a} countries={countries} documentTypes={documentTypes} />

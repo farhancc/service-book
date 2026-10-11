@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Tag } from "@/components/badges";
 import { LoadingBlock, PageHeader } from "@/components/ui";
 import { requireRole } from "@/lib/auth";
 import { getTranslation, listDocumentTypes, listLanguages } from "@/lib/data";
@@ -30,6 +31,7 @@ async function Edit({ params }: { params: PageProps<"/translation/[id]/edit">["p
     <>
       <PageHeader
         title={`Edit: ${row.t.sourceLanguage} → ${row.t.targetLanguage}`}
+        subtitle={row.t.code && <Tag>{row.t.code}</Tag>}
         back={{ href: `/translation/${id}`, label: "Back to price" }}
       />
       <TranslationForm translation={row.t} documentTypes={documentTypes} languages={languages} />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Tag } from "@/components/badges";
 import { LoadingBlock, PageHeader } from "@/components/ui";
 import { requireRole } from "@/lib/auth";
 import { getService } from "@/lib/data";
@@ -24,7 +25,11 @@ async function Edit({ params }: { params: PageProps<"/services/[id]/edit">["para
   if (!service) notFound();
   return (
     <>
-      <PageHeader title={`Edit: ${service.name}`} back={{ href: `/services/${id}`, label: "Back to service" }} />
+      <PageHeader
+        title={`Edit: ${service.name}`}
+        subtitle={service.code && <Tag>{service.code}</Tag>}
+        back={{ href: `/services/${id}`, label: "Back to service" }}
+      />
       <ServiceForm service={service} />
     </>
   );
