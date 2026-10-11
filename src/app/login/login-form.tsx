@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { SubmitButton } from "@/components/client";
+import { PasswordInput, SubmitButton } from "@/components/client";
 import { Field, FormError, inputClass } from "@/components/ui";
 import { login } from "./actions";
 
@@ -14,14 +14,7 @@ export function LoginForm() {
         <input id="email" name="email" type="email" autoComplete="email" required className={inputClass} />
       </Field>
       <Field label="Password" name="password">
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          className={inputClass}
-        />
+        <PasswordInput id="password" name="password" autoComplete="current-password" required />
       </Field>
       <SubmitButton className="w-full" pendingText="Signing in…">
         Sign in

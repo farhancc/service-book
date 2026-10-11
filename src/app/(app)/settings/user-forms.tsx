@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { SubmitButton } from "@/components/client";
+import { PasswordInput, SubmitButton } from "@/components/client";
 import { cx, Field, FormError, inputClass } from "@/components/ui";
 import { ROLE_LABELS } from "@/lib/format";
 import type { ActionState } from "@/lib/form";
@@ -112,13 +112,13 @@ export function ChangePasswordForm() {
       <FormError message={state.error} />
       <Ok state={state} />
       <Field label="Current password" name="current" error={e?.current}>
-        <input id="current" name="current" type="password" autoComplete="current-password" required className={inputClass} />
+        <PasswordInput id="current" name="current" autoComplete="current-password" required />
       </Field>
       <Field label="New password" name="next" error={e?.next} hint="At least 10 characters">
-        <input id="next" name="next" type="password" autoComplete="new-password" required className={inputClass} />
+        <PasswordInput id="next" name="next" autoComplete="new-password" required />
       </Field>
       <Field label="Type it again" name="confirm" error={e?.confirm}>
-        <input id="confirm" name="confirm" type="password" autoComplete="new-password" required className={inputClass} />
+        <PasswordInput id="confirm" name="confirm" autoComplete="new-password" required />
       </Field>
       <SubmitButton>Change password</SubmitButton>
     </form>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { TranslationList } from "@/components/lists";
 import { ButtonLink, Empty, inputClass, LoadingBlock, PageHeader } from "@/components/ui";
-import { hasRole, requireUser } from "@/lib/auth";
+import { getUser, hasRole } from "@/lib/auth";
 import { listTranslations, requestNow } from "@/lib/data";
 import { TRANSLATION_KIND_LABELS } from "@/lib/format";
 
@@ -20,8 +20,8 @@ async function Index({ searchParams }: { searchParams: PageProps<"/translation">
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q : "";
   const kind = typeof sp.kind === "string" ? sp.kind : "";
-  const [user, items] = await Promise.all([requireUser(), listTranslations({ q, kind })]);
-  const canEdit = hasRole(user, "editor");
+  const [user, items] = await Promise.all([getUser(), listTranslations({ q, kind })]);
+  const canEdit = Boolean(user && hasRole(user, "editor"));
 
   return (
     <>

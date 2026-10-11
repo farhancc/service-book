@@ -5,7 +5,7 @@ import { CopyMessage } from "@/components/client";
 import { CheckedNotice, ChecklistSection, EntryActions, HistoryList, PriceCard } from "@/components/detail";
 import { LoadingBlock, PageHeader, Section } from "@/components/ui";
 import type { AttestationStep } from "@/db/schema";
-import { requireUser } from "@/lib/auth";
+import { getUser } from "@/lib/auth";
 import { getAttestation, requestNow } from "@/lib/data";
 import { getHistory } from "@/lib/history";
 import { attestationMessage } from "@/lib/whatsapp";
@@ -31,7 +31,7 @@ async function Detail({
   const id = Number((await params).id);
   if (!Number.isInteger(id)) notFound();
   const [user, row, history, sp] = await Promise.all([
-    requireUser(),
+    getUser(),
     getAttestation(id),
     getHistory("attestation", id),
     searchParams,
@@ -59,7 +59,7 @@ async function Detail({
       />
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
         <div className="space-y-4">
-          <PriceCard item={a} now={now} />
+          <PriceCard item={a} now={now} user={user} />
           <StampTrail steps={a.steps} />
           <ChecklistSection title="Documents the client must give" items={a.requiredDocuments} />
           {a.clientNotes && (

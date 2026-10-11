@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AttestationList } from "@/components/lists";
 import { ButtonLink, Empty, inputClass, LoadingBlock, PageHeader } from "@/components/ui";
-import { hasRole, requireUser } from "@/lib/auth";
+import { getUser, hasRole } from "@/lib/auth";
 import { listAttestations, listCountries, listDocumentTypes, requestNow } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Attestation" };
@@ -24,12 +24,12 @@ async function Index({ searchParams }: { searchParams: PageProps<"/attestation">
   const documentTypeId = num(sp.document);
 
   const [user, items, countries, documentTypes] = await Promise.all([
-    requireUser(),
+    getUser(),
     listAttestations({ q, countryId, documentTypeId }),
     listCountries(),
     listDocumentTypes(),
   ]);
-  const canEdit = hasRole(user, "editor");
+  const canEdit = Boolean(user && hasRole(user, "editor"));
   const filtered = Boolean(q || countryId || documentTypeId);
   const newHref = `/attestation/new${countryId ? `?country=${countryId}` : ""}`;
 

@@ -5,7 +5,7 @@ import { Tag } from "@/components/badges";
 import { CopyMessage } from "@/components/client";
 import { CheckedNotice, EntryActions, HistoryList, PriceCard } from "@/components/detail";
 import { LoadingBlock, PageHeader, Section } from "@/components/ui";
-import { requireUser } from "@/lib/auth";
+import { getUser } from "@/lib/auth";
 import { getTranslation, requestNow } from "@/lib/data";
 import { formatAed, PRICING_UNIT_LABELS, TRANSLATION_KIND_LABELS } from "@/lib/format";
 import { getHistory } from "@/lib/history";
@@ -32,7 +32,7 @@ async function Detail({
   const id = Number((await params).id);
   if (!Number.isInteger(id)) notFound();
   const [user, row, history, sp] = await Promise.all([
-    requireUser(),
+    getUser(),
     getTranslation(id),
     getHistory("translation", id),
     searchParams,
@@ -70,6 +70,7 @@ async function Detail({
           <PriceCard
             item={t}
             now={await requestNow()}
+            user={user}
             unitLabel={unit}
             extra={
               minimum && (

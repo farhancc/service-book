@@ -23,11 +23,13 @@ type Priced = {
 export function PriceCard({
   item,
   now,
+  user,
   unitLabel,
   extra,
 }: {
   item: Priced;
   now: Date;
+  user: CurrentUser | null;
   unitLabel?: string;
   extra?: ReactNode;
 }) {
@@ -66,7 +68,7 @@ export function PriceCard({
         {extra}
       </dl>
       {item.priceNote && <p className="mt-3 text-sm text-ink">{item.priceNote}</p>}
-      {item.internalNotes && (
+      {user && item.internalNotes && (
         <div className="mt-4 rounded-md bg-pending-soft p-3 text-sm">
           <p className="font-semibold text-pending">Internal note</p>
           <p className="mt-0.5 whitespace-pre-line">{item.internalNotes}</p>
@@ -83,13 +85,13 @@ export function EntryActions({
   remove,
   deleteWhat,
 }: {
-  user: CurrentUser;
+  user: CurrentUser | null;
   editHref: string;
   markVerified: () => Promise<void>;
   remove: () => Promise<void>;
   deleteWhat: string;
 }) {
-  if (!hasRole(user, "editor")) return null;
+  if (!user || !hasRole(user, "editor")) return null;
   return (
     <div className="flex flex-wrap gap-2">
       <ButtonLink href={editHref}>Edit</ButtonLink>

@@ -3,7 +3,7 @@
 import { startTransition, useActionState, useState, type ComponentProps, type FormEvent } from "react";
 import { useFormStatus } from "react-dom";
 import type { ActionState } from "@/lib/form";
-import { buttonStyles, cx } from "./ui";
+import { buttonStyles, cx, inputClass } from "./ui";
 
 /**
  * Like useActionState on a <form action>, but the form keeps what the person
@@ -50,6 +50,36 @@ export function SubmitButton({
     >
       {pending ? pendingText : children}
     </button>
+  );
+}
+
+/** A password input with a toggle to reveal what was typed. */
+export function PasswordInput({ className, ...props }: ComponentProps<"input">) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div className="relative">
+      <input {...props} type={visible ? "text" : "password"} className={cx(inputClass, "pr-10", className)} />
+      <button
+        type="button"
+        onClick={() => setVisible((v) => !v)}
+        aria-label={visible ? "Hide password" : "Show password"}
+        aria-pressed={visible}
+        className="absolute inset-y-0 right-0 flex items-center px-3 text-muted hover:text-stamp"
+      >
+        {visible ? (
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 3l18 18" />
+            <path d="M10.6 10.6a3 3 0 0 0 4.24 4.24" />
+            <path d="M9.9 4.24A10.4 10.4 0 0 1 12 4c6.5 0 10 7 10 7a13.2 13.2 0 0 1-2.28 3.17M6.6 6.6C4.1 8.3 2 11 2 11s3.5 7 10 7a9.9 9.9 0 0 0 3.4-.6" />
+          </svg>
+        )}
+      </button>
+    </div>
   );
 }
 

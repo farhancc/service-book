@@ -5,7 +5,7 @@ import { Tag } from "@/components/badges";
 import { CopyMessage } from "@/components/client";
 import { CheckedNotice, ChecklistSection, EntryActions, HistoryList, PriceCard } from "@/components/detail";
 import { LoadingBlock, PageHeader, Section } from "@/components/ui";
-import { requireUser } from "@/lib/auth";
+import { getUser } from "@/lib/auth";
 import { getService, requestNow } from "@/lib/data";
 import { SERVICE_CATEGORY_LABELS } from "@/lib/format";
 import { getHistory } from "@/lib/history";
@@ -32,7 +32,7 @@ async function Detail({
   const id = Number((await params).id);
   if (!Number.isInteger(id)) notFound();
   const [user, s, history, sp] = await Promise.all([
-    requireUser(),
+    getUser(),
     getService(id),
     getHistory("service", id),
     searchParams,
@@ -58,7 +58,7 @@ async function Detail({
       />
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
         <div className="space-y-4">
-          <PriceCard item={s} now={await requestNow()} />
+          <PriceCard item={s} now={await requestNow()} user={user} />
           {s.description && (
             <Section title="What's included">
               <p className="whitespace-pre-line">{s.description}</p>

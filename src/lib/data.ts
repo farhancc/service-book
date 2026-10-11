@@ -3,7 +3,6 @@ import { connection } from "next/server";
 import { and, asc, eq, ilike, isNull, lt, or, sql, type SQL } from "drizzle-orm";
 import type { PgColumn } from "drizzle-orm/pg-core";
 import { db, schema } from "@/db";
-import { requireUser } from "./auth";
 import { STALE_AFTER_DAYS } from "./format";
 
 const { attestations, countries, documentTypes, translations, services } = schema;
@@ -29,12 +28,10 @@ function matchAllWords(q: string | undefined, columns: PgColumn[]): SQL | undefi
 // ── Reference lists ────────────────────────────────────────────────────────────
 
 export async function listCountries() {
-  await requireUser();
   return db.select().from(countries).orderBy(asc(countries.name));
 }
 
 export async function listDocumentTypes() {
-  await requireUser();
   return db.select().from(documentTypes).orderBy(asc(documentTypes.category), asc(documentTypes.name));
 }
 
@@ -57,7 +54,6 @@ const attestationRow = {
 };
 
 export async function listAttestations(filters: { q?: string; countryId?: number; documentTypeId?: number }) {
-  await requireUser();
   return db
     .select(attestationRow)
     .from(attestations)
@@ -75,7 +71,6 @@ export async function listAttestations(filters: { q?: string; countryId?: number
 }
 
 export async function getAttestation(id: number) {
-  await requireUser();
   const rows = await db
     .select({ a: attestations, country: countries.name, documentType: documentTypes.name })
     .from(attestations)
@@ -89,7 +84,6 @@ export async function getAttestation(id: number) {
 // ── Translation ────────────────────────────────────────────────────────────────
 
 export async function listTranslations(filters: { q?: string; kind?: string }) {
-  await requireUser();
   const kind = schema.translationKindEnum.enumValues.find((k) => k === filters.kind);
   return db
     .select({ t: translations, documentType: documentTypes.name })
@@ -110,7 +104,6 @@ export async function listTranslations(filters: { q?: string; kind?: string }) {
 }
 
 export async function getTranslation(id: number) {
-  await requireUser();
   const rows = await db
     .select({ t: translations, documentType: documentTypes.name })
     .from(translations)
@@ -121,7 +114,6 @@ export async function getTranslation(id: number) {
 }
 
 export async function listLanguages() {
-  await requireUser();
   const rows = await db.execute<{ lang: string }>(
     sql`select distinct lang from (
           select ${translations.sourceLanguage} as lang from ${translations}
@@ -134,7 +126,6 @@ export async function listLanguages() {
 // ── Services ───────────────────────────────────────────────────────────────────
 
 export async function listServices(filters: { q?: string; category?: string }) {
-  await requireUser();
   const category = schema.serviceCategoryEnum.enumValues.find((c) => c === filters.category);
   return db
     .select()
@@ -150,7 +141,6 @@ export async function listServices(filters: { q?: string; category?: string }) {
 }
 
 export async function getService(id: number) {
-  await requireUser();
   return (await db.query.services.findFirst({ where: eq(services.id, id) })) ?? null;
 }
 
@@ -167,7 +157,6 @@ export async function searchEverything(q: string) {
 
 /** Entries with no check date or one older than STALE_AFTER_DAYS. */
 export async function needsVerification(now: Date) {
-  await requireUser();
   const cutoff = new Date(now.getTime() - STALE_AFTER_DAYS * 86_400_000);
   const stale = (col: PgColumn) => or(isNull(col), lt(col, cutoff));
 
@@ -209,7 +198,6 @@ export async function needsVerification(now: Date) {
 }
 
 export async function counts() {
-  await requireUser();
   const [row] = await db
     .select({
       attestations: sql<number>`(select count(*) from ${attestations})`.mapWith(Number),

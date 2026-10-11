@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ServiceList } from "@/components/lists";
 import { ButtonLink, cx, Empty, inputClass, LoadingBlock, PageHeader } from "@/components/ui";
-import { hasRole, requireUser } from "@/lib/auth";
+import { getUser, hasRole } from "@/lib/auth";
 import { listServices, requestNow } from "@/lib/data";
 import { SERVICE_CATEGORY_LABELS } from "@/lib/format";
 
@@ -21,8 +21,8 @@ async function Index({ searchParams }: { searchParams: PageProps<"/services">["s
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q : "";
   const category = typeof sp.category === "string" ? sp.category : "";
-  const [user, items] = await Promise.all([requireUser(), listServices({ q, category })]);
-  const canEdit = hasRole(user, "editor");
+  const [user, items] = await Promise.all([getUser(), listServices({ q, category })]);
+  const canEdit = Boolean(user && hasRole(user, "editor"));
   const newHref = `/services/new${category ? `?category=${category}` : ""}`;
 
   return (
